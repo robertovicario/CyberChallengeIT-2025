@@ -1,2 +1,3 @@
 - https://it.wikipedia.org/wiki/Cifrario_di_Vernam
 - https://github.com/CameronLonsdale/MTP
+- https://en.wikipedia.org/wiki/Padding_oracle_attack
