@@ -1,0 +1,19 @@
+GET /backend.php?p=4 HTTP/1.1
+Host: 172.17.0.2:8080
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+X-Requested-With: XMLHttpRequest
+Connection: keep-alive
+Referer: http://172.17.0.2:8080/
+
+
+HTTP/1.1 200 OK
+Host: 172.17.0.2:8080
+Date: Sat, 27 Mar 2021 12:42:02 GMT
+Connection: close
+X-Powered-By: PHP/8.0.3
+Content-type: text/html; charset=UTF-8
+
+qngn:grkg/synt;onfr64,D0AWIUgxo3qhq2SlMN==
