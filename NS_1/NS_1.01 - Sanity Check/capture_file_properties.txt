@@ -1,0 +1,85 @@
+Created by Wireshark 4.4.5 (v4.4.5-0-g47253bcf3773)
+
+File
+
+Name:
+/Users/robertovicario/Desktop/NS_1.01 - Sanity Check/leopardo.pcapng
+Length:
+5200 kB
+Hash (SHA256):
+9b13b78d404c386c87b269e3d25b28644e4d2708ad4f03c85fc889c7f561395d
+Hash (SHA1):
+35c523887fd9dc0c7cd3499b8335b4cae1a9eddd
+Format:
+Wireshark/... - pcapng (gzip compressed)
+Encapsulation:
+Ethernet
+
+Time
+
+First packet:
+2020-03-23 12:42:49
+Last packet:
+2020-03-23 12:56:00
+Elapsed:
+00:13:11
+
+Capture
+
+Hardware:
+Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz (with SSE4.2)
+OS:
+Linux 5.3.0-42-generic
+Application:
+Dumpcap (Wireshark) 2.6.10 (Git v2.6.10 packaged as 2.6.10-1~ubuntu18.04.0)
+
+Interfaces
+
+Interface
+Dropped packets
+Capture filter
+Link type
+Packet size limit (snaplen)
+-
+Unknown
+none
+Ethernet
+65535 bytes
+
+Comments
+CCIT{a8ec63de-0c9a-473e-9b34-11026a9e6b19}
+Statistics
+
+Measurement
+Captured
+Displayed
+Marked
+Packets
+6023
+6023 (100.0%)
+—
+Time span, s
+791.695
+791.695
+—
+Average pps
+7.6
+7.6
+—
+Average packet size, B
+829
+829
+—
+Bytes
+4995856
+4995856 (100.0%)
+0
+Average bytes/s
+6310
+6310
+—
+Average bits/s
+50 k
+50 k
+—
+
