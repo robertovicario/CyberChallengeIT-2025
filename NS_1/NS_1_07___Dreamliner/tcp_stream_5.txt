@@ -1,0 +1,995 @@
+GET / HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+Upgrade-Insecure-Requests: 1
+
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:09 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+<html>
+<head>
+ <title>Dreamliner - https://www.youtube.com/watch?v=FEDqJDy4hZQ</title>
+ <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+  <script
+			  src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+			  integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+			  crossorigin="anonymous"></script>
+</head>
+<body>
+<script>
+function rdraw(msg) {
+  console.log(msg.a)
+  if (msg.flag) {
+      $(".target").effect("shake")
+      $(".target").fadeOut(800, function() {
+            $(".target").html("<img src='images/flag.jpg'><h1>You had a happy landing: " + msg.flag + "</h1>");
+        })
+        .fadeIn(400);
+      return
+  }
+  if (msg.explode) {
+      $(".target").hide( "explode", {pieces: 150 }, 2000 );
+      return
+  }
+
+  var alt = document.getElementById("altitude")
+  var cells = document.getElementById("t").getElementsByTagName("td");
+  for (i = 0; i < 25; i++) {
+    if (i == msg.f)
+        cells[i].innerHTML = "<img src=\"images/dreamliner.jpg\" width=40 height=40 \>";
+    else
+        if (i == msg.r)
+            cells[i].innerHTML = "<img src=\"images/airstrip.png\" width=50 height=50 \>";
+        else
+            cells[i].innerHTML = "";
+  }
+
+  alt.value=msg.alt   
+}
+
+$(document).ready(function() {
+  par=location.href.split('?')[1]
+  if (par == "simulator")
+      alert("Flight Simulator MODE")
+  else
+      par = "START"
+
+  $.ajax({
+    type: "POST",
+    url: "autopilot.php",
+      data: "a=" + par,
+      dataType: "json",
+      success: function(msg) { 
+        rdraw(msg) 
+      }
+  })
+  $("#send").click(function(){
+    var autopilot = $("#autopilot").val();
+    $.ajax({
+      type: "POST",
+      url: "autopilot.php",
+      data: "a=" + autopilot,
+      dataType: "json",
+      success: function(msg)
+      {
+        rdraw(msg)
+      },
+      error: function()
+      {
+        alert("Autopilot error");
+      }
+    });
+  });
+});
+</script>
+
+<center>
+<div class = "target">
+<table background="images/cockpit.jpg" width=1280 height=690 border=0>
+<tr>
+ <td width=20%></td>
+ <td style="color: #fff" rowspan=2 valign=bottom>
+    <form>
+        <b>Altitude <input id=altitude name=altitude readonly=yes type=text size="4"></b> 
+        <input id=autopilot name=autopilot type=text></text>
+        <input id=send name=send type="button" value="SEND">
+    </form>
+    <table border=1 id=t width=300 height=300 style="border-style:none; background-color:gray" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+    </table>
+ </td>
+</tr>
+<tr>
+ <td width=20%>
+ </td>
+ <td valign=bottom style="color: #fff">Dreamliner autopilot v.1.0 by enriqu3z
+ </td>
+</tr>
+</table>
+</center>
+</div>
+
+<body>
+</html>
+
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNR
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:19 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNR", "r":"1", "f":"21", "alt": "900" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:24 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"1", "f":"20", "alt": "800" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNR
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:28 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNR", "r":"1", "f":"21", "alt": "700" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:35 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"DIVE", "r":"1", "f":"16", "alt": "600" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:39 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"1", "f":"15", "alt": "500" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNR
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:42 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNR", "r":"1", "f":"16", "alt": "400" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:46 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"DIVE", "r":"1", "f":"11", "alt": "300" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:53 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"1", "f":"10", "alt": "200" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:18:59 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"DIVE", "r":"1", "f":"5", "alt": "100" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:03 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"DIVE", "r":"1", "f":"0", "alt": "0" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:05 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "explode": "1", "a":"DIVE", "r":"1", "f":"0", "alt": "0" }
+GET / HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+Upgrade-Insecure-Requests: 1
+
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:14 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+<html>
+<head>
+ <title>Dreamliner - https://www.youtube.com/watch?v=FEDqJDy4hZQ</title>
+ <script
+			  src="https://code.jquery.com/jquery-3.4.1.min.js"
+			  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+			  crossorigin="anonymous"></script>
+  <script
+			  src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+			  integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+			  crossorigin="anonymous"></script>
+</head>
+<body>
+<script>
+function rdraw(msg) {
+  console.log(msg.a)
+  if (msg.flag) {
+      $(".target").effect("shake")
+      $(".target").fadeOut(800, function() {
+            $(".target").html("<img src='images/flag.jpg'><h1>You had a happy landing: " + msg.flag + "</h1>");
+        })
+        .fadeIn(400);
+      return
+  }
+  if (msg.explode) {
+      $(".target").hide( "explode", {pieces: 150 }, 2000 );
+      return
+  }
+
+  var alt = document.getElementById("altitude")
+  var cells = document.getElementById("t").getElementsByTagName("td");
+  for (i = 0; i < 25; i++) {
+    if (i == msg.f)
+        cells[i].innerHTML = "<img src=\"images/dreamliner.jpg\" width=40 height=40 \>";
+    else
+        if (i == msg.r)
+            cells[i].innerHTML = "<img src=\"images/airstrip.png\" width=50 height=50 \>";
+        else
+            cells[i].innerHTML = "";
+  }
+
+  alt.value=msg.alt   
+}
+
+$(document).ready(function() {
+  par=location.href.split('?')[1]
+  if (par == "simulator")
+      alert("Flight Simulator MODE")
+  else
+      par = "START"
+
+  $.ajax({
+    type: "POST",
+    url: "autopilot.php",
+      data: "a=" + par,
+      dataType: "json",
+      success: function(msg) { 
+        rdraw(msg) 
+      }
+  })
+  $("#send").click(function(){
+    var autopilot = $("#autopilot").val();
+    $.ajax({
+      type: "POST",
+      url: "autopilot.php",
+      data: "a=" + autopilot,
+      dataType: "json",
+      success: function(msg)
+      {
+        rdraw(msg)
+      },
+      error: function()
+      {
+        alert("Autopilot error");
+      }
+    });
+  });
+});
+</script>
+
+<center>
+<div class = "target">
+<table background="images/cockpit.jpg" width=1280 height=690 border=0>
+<tr>
+ <td width=20%></td>
+ <td style="color: #fff" rowspan=2 valign=bottom>
+    <form>
+        <b>Altitude <input id=altitude name=altitude readonly=yes type=text size="4"></b> 
+        <input id=autopilot name=autopilot type=text></text>
+        <input id=send name=send type="button" value="SEND">
+    </form>
+    <table border=1 id=t width=300 height=300 style="border-style:none; background-color:gray" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+        <tr>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+            <td width=20% height=20% align=center></td>
+        </tr>
+    </table>
+ </td>
+</tr>
+<tr>
+ <td width=20%>
+ </td>
+ <td valign=bottom style="color: #fff">Dreamliner autopilot v.1.0 by enriqu3z
+ </td>
+</tr>
+</table>
+</center>
+</div>
+
+<body>
+</html>
+
+GET /images/cockpit.jpg HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+If-Modified-Since: Thu, 12 Dec 2019 10:08:42 GMT
+If-None-Match: "2779d-5997eee083e80"
+
+
+HTTP/1.1 304 Not Modified
+Content-Length: 0
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:15 GMT
+Server: Apache
+Etag: "2779d-5997eee083e80"
+Via: 1.1 vegur
+
+
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=START
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:15 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"START", "r":"10", "f":"22", "alt": "1000" }
+GET /images/airstrip.png HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+If-Modified-Since: Thu, 12 Dec 2019 10:08:42 GMT
+If-None-Match: "92d7-5997eee083e80"
+
+
+HTTP/1.1 304 Not Modified
+Content-Length: 0
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:15 GMT
+Server: Apache
+Etag: "92d7-5997eee083e80"
+Via: 1.1 vegur
+
+
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:21 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"10", "f":"21", "alt": "900" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:23 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"10", "f":"20", "alt": "800" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNR
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:26 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNR", "r":"10", "f":"21", "alt": "700" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:29 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"10", "f":"20", "alt": "600" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNR
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:34 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNR", "r":"10", "f":"21", "alt": "500" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:37 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"10", "f":"20", "alt": "400" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNR
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:41 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNR", "r":"10", "f":"21", "alt": "300" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=TURNL
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:44 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"TURNL", "r":"10", "f":"20", "alt": "200" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:47 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"DIVE", "r":"10", "f":"15", "alt": "100" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 6
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=DIVE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:51 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "a":"DIVE", "r":"10", "f":"10", "alt": "0" }
+POST /autopilot.php HTTP/1.1
+Host: dreamliner19.herokuapp.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With: XMLHttpRequest
+Content-Length: 7
+Origin: http://dreamliner19.herokuapp.com
+Connection: keep-alive
+Referer: http://dreamliner19.herokuapp.com/
+Cookie: PHPSESSID=p3s1j0b13sbr1bq31gn3o604cjvotmb6
+
+a=BRAKE
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Thu, 12 Dec 2019 10:19:54 GMT
+Server: Apache
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate
+Pragma: no-cache
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Via: 1.1 vegur
+
+{ "flag": "... sorry, no flag using the FLIGHT SIMULATOR!", "a":"BRAKE", "r":"10", "f":"10", "alt": "0" }

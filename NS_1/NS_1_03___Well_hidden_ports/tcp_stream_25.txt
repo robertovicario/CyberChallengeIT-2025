@@ -1,0 +1,27 @@
+GET /robots.txt HTTP/1.1
+Host: www.leopardocompany.com:5432
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: keep-alive
+Referer: http://www.leopardocompany.com:5432/
+Upgrade-Insecure-Requests: 1
+
+
+HTTP/1.1 200 OK
+Date: Mon, 23 Mar 2020 11:44:31 GMT
+Server: Apache/2.4.18 (Ubuntu)
+Last-Modified: Sat, 21 Mar 2020 14:52:24 GMT
+ETag: "5c-5a15e8cc0da00-gzip"
+Accept-Ranges: bytes
+Vary: Accept-Encoding
+Content-Encoding: gzip
+Content-Length: 105
+Keep-Alive: timeout=5, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+
+Disallow: Q0NJVHs4ZGNkNmVmZC01YzgxLTRmM2MtOWQ3My02Y2MyNWJmMWJlNzZ9
+Disallow: ~administrator
