@@ -1,4 +1,4 @@
-# uninsubria-CyberChallengeIT
+# CyberChallenge.IT 2025
 
 ## License
 
